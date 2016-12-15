@@ -76,9 +76,9 @@ maxDevices = 3
 maxDevicesWaitTime = 120
 selectLanguage = addon.getSetting("selectLanguage")
 siteVersion = addon.getSetting("siteVersion")
-apiMain = ["atv-ps", "atv-ps-eu", "atv-ps-eu"][int(siteVersion)]
+apiMain = ["atv-ps", "atv-ps-eu", "atv-ps-eu", "atv-ps-eu"][int(siteVersion)]
 rtmpMain = ["azusfms", "azeufms", "azeufms"][int(siteVersion)]
-siteVersionsList = ["com", "co.uk", "de"]
+siteVersionsList = ["com", "co.uk", "de", "es"]
 siteVersion = siteVersionsList[int(siteVersion)]
 viewIdMovies = addon.getSetting("viewIdMovies")
 viewIdShows = addon.getSetting("viewIdShows")
@@ -145,6 +145,18 @@ def browseMovies():
         if showKids:
             addDir(translation(30007), urlMain+"/gp/search/ajax/?rh=n%3A3280626031%2Cn%3A!3010086031%2Cn%3A3356010031%2Cp_n_theme_browse-bin%3A3046745031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
         addDir(translation(30008), urlMain+"/gp/search/ajax/?_encoding=UTF8&rh=n%3A3010085031%2Cn%3A3356010031&sort=date-desc-rank", 'listMovies', "")
+    if siteVersion=="es":
+        addDir(translation(30006), urlMain+"/gp/search/ajax/?_encoding=UTF8&rh=n%3A3010075031%2Cn%3A3356018031&sort=popularity-rank", 'listMovies', "")
+        addDir(translation(30011), urlMain+"/gp/search/other/?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031&pickerToList=theme_browse-bin&ie=UTF8", 'listGenres', "", "movie")
+        addDir(translation(30014), "", 'listDecadesMovie', "")
+        if showKids:
+            addDir(translation(30007), urlMain+"/gp/search/ajax/?rh=n%3A3010075031%2Cn%3A!3010076031%2Cn%3A3015915031%2Cp_n_theme_browse-bin%3A3015972031%2Cp_85%3A3282148031&ie=UTF8", 'listMovies', "")
+
+        addDir(translation(30008), urlMain+"/gp/search/ajax/?_encoding=UTF8&rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031&sort=date-desc-rank", 'listMovies', "")
+        addDir(translation(30009), urlMain+"/s/?n=4963842031&_encoding=UTF", 'listMovies', "")
+        addDir(translation(30999), urlMain+"/gp/search/ajax/?_encoding=UTF8&rh=n%3A3010075031%2Cn%3A3356018031%2Cn%3A4225009031&sort=popularity-rank", 'listMovies', "")
+
+
     addDir(translation(30015), "movies", 'search', "")
     xbmcplugin.endOfDirectory(pluginhandle)
 
@@ -217,6 +229,8 @@ def listOriginals():
         content = getUnicodePage(urlMain+"/b/?ie=UTF8&node=9940930011")
     elif siteVersion=="co.uk":
         content = getUnicodePage(urlMain+"/b/?ie=UTF8&node=5687760031")
+    elif siteVersion=="es":
+        content = getUnicodePage(urlMain+"/b/?ie=UTF8&node=9940930011")
     debug(content)
     match = re.compile('csrf":"(.+?)"', re.DOTALL).findall(content)
     if match:
@@ -1064,7 +1078,11 @@ def search(type):
                 listMovies(urlMain+"/mn/search/ajax/?_encoding=UTF8&url=node%3D3356010031&field-keywords="+search_string)
             elif type=="tv":
                 listShows(urlMain+"/mn/search/ajax/?_encoding=UTF8&url=node%3D3356011031&field-keywords="+search_string)
-        
+        if siteVersion=="es":
+            if type=="movies":
+                listMovies(urlMain+"/mn/search/ajax/?_encoding=UTF8&url=node%3D3356018031&field-keywords="+search_string)
+            elif type=="tv":
+                listShows(urlMain+"/mn/search/ajax/?_encoding=UTF8&url=node%3D3356019031&field-keywords="+search_string)        
 
 
 def addToQueue(videoID, videoType):
