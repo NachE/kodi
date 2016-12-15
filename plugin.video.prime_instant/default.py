@@ -34,7 +34,7 @@ icon = os.path.join(addonFolder, "icon.png")#.encode('utf-8')
 
 def translation(id):
     return addon.getLocalizedString(id) #.encode('utf-8')
-    
+
 if not os.path.exists(os.path.join(addonUserDataFolder, "settings.xml")):
     xbmc.executebuiltin(unicode('XBMC.Notification(Info:,'+translation(30081)+',10000,'+icon+')').encode("utf-8"))
     addon.openSettings()
@@ -77,7 +77,7 @@ maxDevicesWaitTime = 120
 selectLanguage = addon.getSetting("selectLanguage")
 siteVersion = addon.getSetting("siteVersion")
 apiMain = ["atv-ps", "atv-ps-eu", "atv-ps-eu", "atv-ps-eu"][int(siteVersion)]
-rtmpMain = ["azusfms", "azeufms", "azeufms"][int(siteVersion)]
+rtmpMain = ["azusfms", "azeufms", "azeufms", "azeufms"][int(siteVersion)]
 siteVersionsList = ["com", "co.uk", "de", "es"]
 siteVersion = siteVersionsList[int(siteVersion)]
 viewIdMovies = addon.getSetting("viewIdMovies")
@@ -218,6 +218,14 @@ def listDecadesMovie():
         addDir(translation(30020), urlMain+"/gp/search/ajax/?rh=n%3A3280626031%2Cn%3A!3010086031%2Cn%3A3356010031%2Cp_n_feature_three_browse-bin%3A3289670031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
         addDir(translation(30021), urlMain+"/gp/search/ajax/?rh=n%3A3280626031%2Cn%3A!3010086031%2Cn%3A3356010031%2Cp_n_feature_three_browse-bin%3A3289671031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
         addDir(translation(30022), urlMain+"/gp/search/ajax/?rh=n%3A3280626031%2Cn%3A!3010086031%2Cn%3A3356010031%2Cp_n_feature_three_browse-bin%3A3289672031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
+    if siteVersion=="es":
+        addDir(translation(30016), urlMain+"/gp/search/ajax/?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031%2Cp_n_feature_three_browse-bin%3A3289642031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
+        addDir(translation(30017), urlMain+"/gp/search/ajax/?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031%2Cp_n_feature_three_browse-bin%3A3289643031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
+        addDir(translation(30018), urlMain+"/gp/search/ajax/?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031%2Cp_n_feature_three_browse-bin%3A3289644031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
+        addDir(translation(30019), urlMain+"/gp/search/ajax/?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031%2Cp_n_feature_three_browse-bin%3A3289645031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
+        addDir(translation(30020), urlMain+"/gp/search/ajax/?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031%2Cp_n_feature_three_browse-bin%3A3289646031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
+        addDir(translation(30021), urlMain+"/gp/search/ajax/?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031%2Cp_n_feature_three_browse-bin%3A3289647031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
+        addDir(translation(30022), urlMain+"/gp/search/ajax/?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031%2Cp_n_feature_three_browse-bin%3A3289648031&sort=popularity-rank&ie=UTF8", 'listMovies', "")
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
@@ -344,7 +352,7 @@ def listWatchList(url):
                 if showAvailability:
                     match = re.compile('\<span\s+class\s*=\s*"packshot-message"\s*\>(.+?)\<\/span\>', re.DOTALL).findall(entry)
                     if match:
-                        avail=" - " + cleanInput(match[0])                        
+                        avail=" - " + cleanInput(match[0])
 
                 if videoType=="tv":
                     if useWLSeriesComplete:
@@ -353,7 +361,7 @@ def listWatchList(url):
 
                         if title in showEntries:
                             continue
-                        
+
                         addShowDirR(cleanTitleTMDB(title) + avail, videoID, "listSeasons", thumbUrl, videoType, showAll=True)
                         showEntries.append(title)
                     else:
@@ -365,9 +373,9 @@ def listWatchList(url):
                     title = cleanTitle(title)
                     dlParams.append({'type':videoType, 'id':videoID, 'title':cleanTitleTMDB(cleanTitle(title)), 'year':''})
                     addLinkR(cleanTitleTMDB(title) + avail, videoID, "playVideo", thumbUrl, videoType)
-                    
-                    
-    
+
+
+
     match_nextpage = re.compile('<a href=".+?dv_web_wtls_pg_nxt.+?&page=(.+?)&.+?">', re.DOTALL).findall(content)
     if match_nextpage:
         addDir(translation(30001), url + "&page=" + match_nextpage[0].strip(), "listWatchList", "DefaultTVShows.png")
@@ -400,13 +408,13 @@ def listMovies(url):
     match = re.compile('csrf":"(.+?)"', re.DOTALL).findall(content)
     if match:
         addon.setSetting('csrfToken', match[0])
-    
+
     args = urlparse.parse_qs(url[1:])
     page = args.get('page', None)
     if page is not None:
         if int(page[0]) > 1:
             content = content[content.find('breadcrumb.breadcrumbSearch'):]
-    
+
     spl = content.split('id="result_')
     dlParams = []
     videoimage = ScrapeUtils.VideoImage()
@@ -652,7 +660,7 @@ def listEpisodes(seriesID, seasonID, thumb, content="", seriesName=""):
     seasonNr="0"
     if matchSeason:
         seasonNr=matchSeason[0]
-    
+
     epliststart = content.rfind("<li ", 0, content.find("first-episode"))
     eplistend = content.find("</ul>", epliststart)
     content = content[epliststart:eplistend]
@@ -771,7 +779,7 @@ def playVideo(videoID, selectQuality=False, playTrailer=False):
         qlogin = login()
         if qlogin == "noprime" or qlogin == "prime":
             content = getUnicodePage(urlMain+"/dp/"+videoID + "/?_encoding=UTF8")
-    
+
     hasTrailer = False
     #if '&quot;playTrailer&quot;:true' in content:
     #    hasTrailer = True
@@ -965,7 +973,7 @@ def playVideo(videoID, selectQuality=False, playTrailer=False):
                     diag.ok(translation(30094), translation(30095))
     else:
         xbmc.executebuiltin('XBMC.Notification(Info:,'+translation(30082)+',10000,'+icon+')')
-   
+
 
 def showInfo(videoID):
     xbmcplugin.setContent(pluginhandle, "movies")
@@ -1005,7 +1013,7 @@ def showInfo(videoID):
         wnd.getControl(wnd.getFocusId()).selectItem(1)
     except:
         pass
-        
+
 
 def deleteCookies():
     if os.path.exists(cookieFile):
@@ -1078,11 +1086,11 @@ def search(type):
                 listMovies(urlMain+"/mn/search/ajax/?_encoding=UTF8&url=node%3D3356010031&field-keywords="+search_string)
             elif type=="tv":
                 listShows(urlMain+"/mn/search/ajax/?_encoding=UTF8&url=node%3D3356011031&field-keywords="+search_string)
-        if siteVersion=="es":
+        elif siteVersion=="es":
             if type=="movies":
                 listMovies(urlMain+"/mn/search/ajax/?_encoding=UTF8&url=node%3D3356018031&field-keywords="+search_string)
             elif type=="tv":
-                listShows(urlMain+"/mn/search/ajax/?_encoding=UTF8&url=node%3D3356019031&field-keywords="+search_string)        
+                listShows(urlMain+"/mn/search/ajax/?_encoding=UTF8&url=node%3D3356019031&field-keywords="+search_string)
 
 
 def addToQueue(videoID, videoType):
@@ -1106,7 +1114,7 @@ def login(content = None, statusOnly = False):
     if content is None:
         content = getUnicodePage(urlMainS)
     signoutmatch = re.compile("declare\('config.signOutText',(.+?)\);", re.DOTALL).findall(content)
-    if '","isPrime":1' in content: # 
+    if '","isPrime":1' in content: #
         return "prime"
     elif signoutmatch[0].strip() != "null":
         return "noprime"
@@ -1138,7 +1146,7 @@ def login(content = None, statusOnly = False):
                 cj.load(cookieFile)
                 content = getUnicodePage(urlMainS)
         signoutmatch = re.compile("declare\('config.signOutText',(.+?)\);", re.DOTALL).findall(content)
-        if '","isPrime":1' in content: # 
+        if '","isPrime":1' in content: #
             return "prime"
         elif signoutmatch[0].strip() != "null":
             return "noprime"
@@ -1152,7 +1160,7 @@ def cleanInput(str):
         xmlc = re.compile('&#(.+?);', re.DOTALL).findall(str)
         for c in xmlc:
             str = str.replace("&#"+c+";", unichr(int(c)))
-    
+
     p = HTMLParser()
     str = p.unescape(str)
     #str = str.encode("utf-8")
@@ -1182,9 +1190,9 @@ def cleanSeasonTitle(title):
 
 def cleanTitleTMDB(title):
     if "[" in title:
-        title = title[:title.find("[")]    
+        title = title[:title.find("[")]
     if " OmU" in title:
-        title = title[:title.find(" OmU")]    
+        title = title[:title.find(" OmU")]
     return title
 
 
